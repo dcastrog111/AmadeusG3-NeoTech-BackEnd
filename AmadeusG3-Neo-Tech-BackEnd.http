@@ -1,0 +1,6 @@
+@AmadeusG3_Neo_Tech_BackEnd_HostAddress = http://localhost:5260
+
+GET {{AmadeusG3_Neo_Tech_BackEnd_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
