@@ -41,9 +41,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
         [HttpGet("byEmail/{email}")]
         public async Task<ActionResult<UserResponse>> GetUserByEmail(string email)
         {
-            var user = await userService.GetUserByEmail(email);
-
-            var userResponse = UserToUserResponse.MapUserToUserResponse(user);
+            var userResponse = await userService.GetUserByEmail(email);
             
             if (userResponse == null)
             {

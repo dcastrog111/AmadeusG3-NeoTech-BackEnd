@@ -54,6 +54,18 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             
             return Created(nameof(GetQuestion_OptionsById), newQuestion_Options);
         }
+
+        [HttpGet("byQuestionId/{questionId}")]
+        public async Task<IActionResult> GetOptionsByQuestionId(int questionId)
+        {
+            var question_Options = await question_OptionsService.GetOptionsByQuestionId(questionId);
+            if(question_Options.Count == 0)
+            {
+                return NotFound(new Response {Message = "No hay opciones de preguntas registradas", StatusCode = 404});
+            }
+            
+            return Ok(question_Options);
+        }
     }
 
 }

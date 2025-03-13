@@ -2,6 +2,8 @@
 using AmadeusG3_Neo_Tech_BackEnd.Models;
 using AmadeusG3_Neo_Tech_BackEnd.Data;
 using AmadeusG3_Neo_Tech_BackEnd.Repositories;
+using AmadeusG3_Neo_Tech_BackEnd.Dtos;
+using AmadeusG3_Neo_Tech_BackEnd.Mappers;
 
 
 namespace AmadeusG3_Neo_Tech_BackEnd.Services{
@@ -25,9 +27,11 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return await userRepository.GetUserById(id);
         }
 
-        public async Task<User?> GetUserByEmail(string email)
+        public async Task<UserResponse> GetUserByEmail(string email)
         {
-            return await userRepository.GetUserByEmail(email);
+            var user = await userRepository.GetUserByEmail(email);
+            var userResponse = UserToUserResponse.MapUserToUserResponse(user);
+            return userResponse; 
         }
 
         public async Task<User> CreateUser(User user)

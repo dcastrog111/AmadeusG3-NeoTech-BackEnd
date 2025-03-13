@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using AmadeusG3_Neo_Tech_BackEnd.Models;
 using AmadeusG3_Neo_Tech_BackEnd.Data;
+using System.ComponentModel;
 
 namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
     
@@ -29,6 +30,11 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             var newQuestion_options = dbContext.Questions_Options.Add(question_options);
             await dbContext.SaveChangesAsync();
             return newQuestion_options.Entity;
+        }
+
+        public async Task<List<Question_Options>> GetOptionsByQuestionId(int questionId)
+        {
+            return await dbContext.Questions_Options.Where(Question_Options => Question_Options.Question.Id == questionId).ToListAsync();
         }
 
     }

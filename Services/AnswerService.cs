@@ -83,5 +83,15 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return await answerRepository.GetAnswersByUserIdQuestionId(userId, questionId);
         }
 
+        public async Task<List<Answer>> GetAnswersByUserId(int userId)
+        {
+            return await answerRepository.GetAnswersByUserId(userId);
+        }
+
+        // public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
+        // {
+        //     return await answerRepository.GetQuestionOptionCounts();
+        // }
+
     }
 }

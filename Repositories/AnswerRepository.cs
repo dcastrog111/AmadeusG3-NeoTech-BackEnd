@@ -1,6 +1,10 @@
 using AmadeusG3_Neo_Tech_BackEnd.Models;
 using AmadeusG3_Neo_Tech_BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
+using AmadeusG3_Neo_Tech_BackEnd.Dtos;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 // using System.Reflection;
 
@@ -54,6 +58,28 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             await dbContext.SaveChangesAsync();
             return answer;
         }
-        
+
+        // public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
+        // {
+        //     return await dbContext.Answers
+        //         .GroupBy(a => a.Question_Option.Id)
+        //         .Select(g => new QuestionOptionCount
+        //         {
+        //             QuestionOptionId = g.Key,
+        //             Count = g.Count()
+        //         })
+        //         .ToListAsync();
+        // }
+
+        // public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
+        // {
+        //     return await (from a in dbContext.Answers
+        //                 join o in dbContext.Questions_Options on a.Question_Option.Id equals o.Id
+        //                 select new QuestionOptionCount
+        //                 {
+        //                     QuestionOption = o.Description,
+        //                     Count = dbContext.Answers.Count(ans => ans.Question_Option.Id == o.Id)
+        //                 }).ToListAsync();
+        // }
     }
 }

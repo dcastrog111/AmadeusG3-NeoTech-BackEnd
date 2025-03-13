@@ -19,7 +19,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
         }
 
 
-        [HttpPost]
+        [HttpPost("create")]
         public async Task<IActionResult> CreateAnswer(AnswerRequest answerRequest){
             
             Answer? answer = await answerService.CreateAnswer(answerRequest);
@@ -43,12 +43,31 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(answers);
         }
 
-        [HttpGet("byUserId/{userId}")]
+        [HttpGet("destinosByUserId/{userId}")]
         public async Task<IActionResult> GetCitiesByUserId(int userId)
         {
             var answerResponse = await answerService.GetCitiesByUserId(userId);
             return Ok(answerResponse);
         }
+
+        [HttpGet("byUserId/{userId}")]
+        public async Task<IActionResult> GetAnswersByUserId(int userId)
+        {
+            var answers = await answerService.GetAnswersByUserId(userId);
+            if(answers.Count == 0)
+            {
+                return NotFound(new Response {Message = "Usuario no tiene opciones registradas", StatusCode = 404});
+            }
+
+            return Ok(answers);
+        }
+
+        // [HttpGet("CountAnswers")]
+        // public async Task<IActionResult> GetQuestionOptionCounts()
+        // {
+        //     var questionOptionCounts = await answerService.GetQuestionOptionCounts();
+        //     return Ok(questionOptionCounts);
+        // }
 
     }
 }
