@@ -12,7 +12,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Mappers{
                 Id = question_OptionsRequest.Id,
                 Description = question_OptionsRequest.Description,
                 Dato = question_OptionsRequest.Dato,
-                //UrlImg = question_OptionsRequest.UrlImg,
+                UrlImg = question_OptionsRequest.UrlImg,
                 Question = question
                 
             };

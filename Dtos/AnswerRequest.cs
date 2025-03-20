@@ -1,3 +1,5 @@
+using AmadeusG3_Neo_Tech_BackEnd.Models;
+
 namespace AmadeusG3_Neo_Tech_BackEnd.Dtos{
 
     public class AnswerRequest{
