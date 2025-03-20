@@ -3,6 +3,7 @@ using AmadeusG3_Neo_Tech_BackEnd.Services;
 using Microsoft.AspNetCore.Mvc;
 using AmadeusG3_Neo_Tech_BackEnd.Models;
 using AmadeusG3_Neo_Tech_BackEnd.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
     
@@ -18,7 +19,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             answerService = new AnswerService(dbContext);
         }
 
-
         [HttpPost("create")]
         public async Task<IActionResult> CreateAnswer(AnswerRequest answerRequest){
             
@@ -31,6 +31,13 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(answer);
         }
 
+        [HttpGet("get/{userId}/{respuestas}")]
+        public async Task<IActionResult> SaveAndCalculate(int userId, string respuestas)
+        {
+            var answerResponse = await answerService.SaveAndCalculate(userId, respuestas);
+            return Ok(answerResponse);
+        }
+
         [HttpGet("{userId}/{questionId}")]
         public async Task<IActionResult> GetAnswersByUserIdQuestionId(int userId, int questionId)
         {
@@ -41,6 +48,15 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             }
 
             return Ok(answers);
+        }
+        
+        [HttpGet("reportes")]
+        public IActionResult ReporteQuestionsByCount()
+        {
+            var questionOptionCounts = answerService.ReporteQuestionsByCount();
+            
+
+            return Ok(questionOptionCounts);
         }
 
         [HttpGet("destinosByUserId/{userId}")]
@@ -62,12 +78,19 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(answers);
         }
 
-        // [HttpGet("CountAnswers")]
-        // public async Task<IActionResult> GetQuestionOptionCounts()
-        // {
-        //     var questionOptionCounts = await answerService.GetQuestionOptionCounts();
-        //     return Ok(questionOptionCounts);
-        // }
+        [HttpGet("CountAnswers")]
+        public async Task<IActionResult> GetQuestionOptionCounts()
+        {
+            var questionOptionCounts = await answerService.GetQuestionOptionCounts();
+            return Ok(questionOptionCounts);
+        }
+
+        [HttpGet("AnswerTextByUser/{userId}")]
+        public async Task<IActionResult> GetAnswerTextByUser(int userId)
+        {
+            var answerText = await answerService.GetAnswerTextByUser(userId);
+            return Ok(answerText);
+        }
 
     }
 }

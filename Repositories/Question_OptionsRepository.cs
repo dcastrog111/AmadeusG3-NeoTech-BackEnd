@@ -14,6 +14,11 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             this.dbContext = dbContext;
         }
 
+        public IQueryable<Question_Options> GetAllQuestion_OptionsQuery()
+        {
+            return dbContext.Questions_Options;
+        }   
+
         public async Task<List<Question_Options>> GetAllQuestion_Options()
         {
             return await dbContext.Questions_Options.Include(q => q.Question).ToListAsync();
@@ -23,6 +28,11 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
         public async Task<Question_Options?> GetQuestion_OptionsById(int id)
         {
             return await dbContext.Questions_Options.Include(q => q.Question).FirstOrDefaultAsync(question_options => question_options.Id == id);
+        }
+
+        public async Task<Question_Options?> GetQuestion_OptionsByDescription(string description)
+        {
+            return await dbContext.Questions_Options.Include(q => q.Question).FirstOrDefaultAsync(question_options => question_options.Description == description);
         }
 
         public async Task<Question_Options> CreateQuestion_Options(Question_Options question_options)

@@ -5,6 +5,8 @@ using AmadeusG3_Neo_Tech_BackEnd.Dtos;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.IO.Compression;
 
 // using System.Reflection;
 
@@ -16,6 +18,16 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
 
         public AnswerRepository(ApplicationDbContext dbContext){
             this.dbContext = dbContext;
+        }
+
+        public IQueryable<Answer> GetAllAnswersQuery()
+        {
+            return dbContext.Answers;
+        }
+
+        public Answer GetByIdQuery(int Id)
+        {
+            return dbContext.Answers.FirstOrDefault(answer => answer.Id == Id);
         }
 
         public async Task<List<Answer>> GetAllAnswers()
@@ -59,27 +71,51 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return answer;
         }
 
-        // public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
-        // {
-        //     return await dbContext.Answers
-        //         .GroupBy(a => a.Question_Option.Id)
-        //         .Select(g => new QuestionOptionCount
-        //         {
-        //             QuestionOptionId = g.Key,
-        //             Count = g.Count()
-        //         })
-        //         .ToListAsync();
-        // }
+        public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
+        {
+            var query = from a in dbContext.Answers
+                        join qo in dbContext.Questions_Options
+                        on a.Question_Option.Id equals qo.Id
 
-        // public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
-        // {
-        //     return await (from a in dbContext.Answers
-        //                 join o in dbContext.Questions_Options on a.Question_Option.Id equals o.Id
-        //                 select new QuestionOptionCount
-        //                 {
-        //                     QuestionOption = o.Description,
-        //                     Count = dbContext.Answers.Count(ans => ans.Question_Option.Id == o.Id)
-        //                 }).ToListAsync();
-        // }
+                        //Renombrar porque no se puede tener dos campos con el mismo nombre, asi este precedidos por la tabla a la que pertenecen
+                        group new {a.Question.Id, QuestionOptionId = qo.Id, qo.Description } 
+                        by new  {a.Question.Id, QuestionOptionId = qo.Id, qo.Description } into g
+                        select new
+                        {
+                            Question_OptionId = g.Key.QuestionOptionId,
+                            Count = g.Count(),
+                            Description = g.Key.Description
+                        };
+
+            return await query.Select(q => new QuestionOptionCount
+            {
+                QuestionOptionText = q.Description,
+                Count = q.Count
+            }).ToListAsync();
+
+        }
+
+        public async Task<List<AnswerDescriptionUser>> GetAnswerTextByUser(int userId)
+        {
+            var query = from a in dbContext.Answers
+                        join qo in dbContext.Questions_Options
+                        on a.Question_Option.Id equals qo.Id
+                        join q in dbContext.Questions
+                        on a.Question.Id equals q.Id
+                        where a.User.Id == userId
+                        select new
+                        {
+                            q.Question_Text,
+                            qo.Description
+                        };
+
+            return await query.Select(q => new AnswerDescriptionUser
+            {
+                QuestionText = q.Question_Text,
+                QuestionOptionText = q.Description
+                
+            }).ToListAsync();
+        }
     }
+
 }

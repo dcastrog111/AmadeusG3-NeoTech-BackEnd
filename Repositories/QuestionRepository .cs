@@ -13,6 +13,11 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             this.dbContext = dbContext;
         }
 
+        public IQueryable<Question> GetAllQuestionQuery()
+        {
+            return dbContext.Questions;
+        }
+
         public async Task<List<Question>> GetAllQuestion()
         {
             return await dbContext.Questions.ToListAsync();

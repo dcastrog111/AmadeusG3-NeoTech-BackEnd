@@ -51,5 +51,10 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return await question_optionsRepository.GetOptionsByQuestionId(questionId);
         }
 
+        public async Task<Question_Options?> GetQuestion_OptionsByDescription(string description)
+        {
+            return await question_optionsRepository.GetQuestion_OptionsByDescription(description);
+        }
+
     }
 }

@@ -23,6 +23,18 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(cities);
         }
 
+        [HttpGet("byName/{City}")]
+        public async Task<IActionResult> GetCityByName(string City)
+        {
+            var city = await cityService.GetCityByName(City);
+
+            if (city == null)
+            {
+                return NotFound(new Response { Message = "Ciudad no se encuentra registrada", StatusCode = 404 });
+            }
+            return Ok(city);
+        }
+
         [HttpGet("byNames/{Fist_City}/{Second_City}")]
 
         public async Task<IActionResult> GetCityByName(string Fist_City, string Second_City){
@@ -64,5 +76,13 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             newCity = await cityService.CreateCity(city);
             return Created(nameof(GetCityById), newCity);
         }
+
+        [HttpPut("updateCity/{id}")]
+        public async Task<IActionResult> UpdateUser(int id, City city)
+        {
+            var cityUpdated = await cityService.UpdateUser(id, city);
+            return Ok(cityUpdated);
+        }
+
     }
 }

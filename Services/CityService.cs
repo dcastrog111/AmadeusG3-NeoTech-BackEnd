@@ -33,5 +33,10 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return await cityRepository.CreateCity(city);
         }
 
+        public async Task<City?> UpdateUser(int id, City city)
+        {
+            return await cityRepository.UpdateUser(id, city);
+        }
+
     }
 }

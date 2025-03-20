@@ -16,7 +16,9 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
 
         public async Task<List<Question>> GetAllQuestion()
         {
-            return await questionRepository.GetAllQuestion();
+            var questions = questionRepository.GetAllQuestion();
+
+            return await questions;
         }
 
         public async Task<Question?> GetQuestionById(int id)
@@ -34,6 +36,5 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
                 return saveQuestion;
             }
         }
-
     }
 }

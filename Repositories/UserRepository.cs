@@ -15,7 +15,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
         public UserRepository(ApplicationDbContext dbContext){
             this.dbContext = dbContext;
         }
-
+        
         public async Task<List<User>> GetAllUsers()
         {
             return await dbContext.Users.ToListAsync();
@@ -38,7 +38,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return newUser.Entity;
         }
 
-        public async Task<User> DeleteUser(int id)
+        public async Task<User?> DeleteUser(int id)
         {
             var user = await GetUserById(id);
             dbContext.Users.Remove(user);
@@ -46,20 +46,31 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return user;
         }
 
-        public async Task<User> UpdateUser(User user)
+        public async Task<User?> UpdateUser(int id, User user)
         {
-            var userToUpdate = await GetUserById(user.Id);
-            if (userToUpdate == null) return null;
+            var userToBeUpdate = await this.GetUserById(id);
+            if(userToBeUpdate == null) return null;
 
-            userToUpdate.Full_Name = user.Full_Name;
-            userToUpdate.Email = user.Email;
-            userToUpdate.Password = user.Password;
-            userToUpdate.Tipo_Usuario = user.Tipo_Usuario;
+            user.Id = userToBeUpdate.Id;
 
+            var userUpdated = UpdateObject(userToBeUpdate, user);
 
-            dbContext.Users.Update(userToUpdate);
+            dbContext.Users.Update(userUpdated);
             await dbContext.SaveChangesAsync();
-            return userToUpdate;
+            return userToBeUpdate;
+        }
+
+        private static T UpdateObject<T>(T current, T newObject)
+        {
+            foreach (PropertyInfo prop in typeof(T).GetProperties())
+            {
+                var newValue = prop.GetValue(newObject);
+                if(newValue == null || string.IsNullOrEmpty(newValue.ToString())){
+                    continue;
+                }
+                prop.SetValue(current, newValue);
+            }
+            return current;
         }
 
     }

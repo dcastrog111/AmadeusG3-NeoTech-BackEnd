@@ -27,9 +27,10 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return await userRepository.GetUserById(id);
         }
 
-        public async Task<UserResponse> GetUserByEmail(string email)
+        public async Task<UserResponse?> GetUserByEmail(string email)
         {
             var user = await userRepository.GetUserByEmail(email);
+            if(user == null) return null;
             var userResponse = UserToUserResponse.MapUserToUserResponse(user);
             return userResponse; 
         }
@@ -45,14 +46,23 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             }
         }
 
-        public async Task<User> DeleteUser(int id)
+        public async Task<string> ValidatePassword(int idUser, string password)
+        {
+            var user = await userRepository.GetUserById(idUser);
+            if(user == null) return "Usuario no encontrado";
+            if(user.Tipo_Usuario == 0) return "Usuario no es administrador";
+            if (user.Password == password) return "Contraseña correcta, puede continuar";
+            else return "Contraseña incorrecta, intente de nuevo";
+        }
+
+        public async Task<User?> DeleteUser(int id)
         {
             return await userRepository.DeleteUser(id);
         }
 
-        public async Task<User> UpdateUser(User user)
+        public async Task<User?> UpdateUser(int id, User user)
         {
-            return await userRepository.UpdateUser(user);
+            return await userRepository.UpdateUser(id, user);
         }
 
     }
