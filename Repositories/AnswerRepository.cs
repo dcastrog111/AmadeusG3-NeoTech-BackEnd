@@ -76,21 +76,58 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             var query = from a in dbContext.Answers
                         join qo in dbContext.Questions_Options
                         on a.Question_Option.Id equals qo.Id
+                        join q in dbContext.Questions
+                        on a.Question.Id equals q.Id
 
                         //Renombrar porque no se puede tener dos campos con el mismo nombre, asi este precedidos por la tabla a la que pertenecen
-                        group new {a.Question.Id, QuestionOptionId = qo.Id, qo.Description } 
-                        by new  {a.Question.Id, QuestionOptionId = qo.Id, qo.Description } into g
+                        group new {a.Question.Id, QuestionOptionId = qo.Id, qo.Description, q.Question_Text } 
+                        by new  {a.Question.Id, QuestionOptionId = qo.Id, qo.Description, q.Question_Text } into g
                         select new
                         {
                             Question_OptionId = g.Key.QuestionOptionId,
                             Count = g.Count(),
-                            Description = g.Key.Description
+                            Description = g.Key.Description,
+                            QuestionText = g.Key.Question_Text,
+                            QuestionId = g.Key.Id
                         };
 
             return await query.Select(q => new QuestionOptionCount
             {
                 QuestionOptionText = q.Description,
-                Count = q.Count
+                Count = q.Count,
+                QuestionText = q.QuestionText,
+                Question = q.QuestionId
+            }).ToListAsync();
+
+        }
+
+public async Task<List<QuestionOptionCount>> GetQuestionOptionCountsById(int QuestionId)
+        {
+            var query = from a in dbContext.Answers
+                        join qo in dbContext.Questions_Options
+                        on a.Question_Option.Id equals qo.Id
+                        join q in dbContext.Questions
+                        on a.Question.Id equals q.Id
+
+                        //Renombrar porque no se puede tener dos campos con el mismo nombre, asi este precedidos por la tabla a la que pertenecen
+                        group new {a.Question.Id, QuestionOptionId = qo.Id, qo.Description, q.Question_Text } 
+                        by new  {a.Question.Id, QuestionOptionId = qo.Id, qo.Description, q.Question_Text } into g
+                        where g.Key.Id == QuestionId
+                        select new
+                        {
+                            Question_OptionId = g.Key.QuestionOptionId,
+                            Count = g.Count(),
+                            Description = g.Key.Description,
+                            QuestionText = g.Key.Question_Text,
+                            QuestionId = g.Key.Id
+                        };
+
+            return await query.Select(q => new QuestionOptionCount
+            {
+                QuestionOptionText = q.Description,
+                Count = q.Count,
+                QuestionText = q.QuestionText,
+                Question = q.QuestionId
             }).ToListAsync();
 
         }

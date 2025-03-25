@@ -55,7 +55,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
         {
             IQueryable<Answer> answers = answerRepository.GetAllAnswersQuery();
 
-            IQueryable<Question_Options> questionOptions = question_OptionsRepository.GetAllQuestion_OptionsQuery();
+            //IQueryable<Question_Options> questionOptions = question_OptionsRepository.GetAllQuestion_OptionsQuery();
 
             List<QuestionOptionCount> query = answers.GroupBy(x => x.Question_Option.Id)
                 .Select(x => new QuestionOptionCount
@@ -70,6 +70,8 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             
             return query;
         }
+
+        
 
         public async Task<AnswerResponse?> SaveAndCalculate(int userId, string respuestas)
         {
@@ -153,6 +155,11 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
         public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
         {
             return await answerRepository.GetQuestionOptionCounts();
+        }
+
+        public async Task<List<QuestionOptionCount>> GetQuestionOptionCountsById(int questionId)
+        {
+            return await answerRepository.GetQuestionOptionCountsById(questionId);
         }
 
         public async Task<List<AnswerDescriptionUser>> GetAnswerTextByUser(int userId)

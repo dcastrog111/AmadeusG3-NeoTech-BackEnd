@@ -49,15 +49,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
 
             return Ok(answers);
         }
-        
-        [HttpGet("reportes")]
-        public IActionResult ReporteQuestionsByCount()
-        {
-            var questionOptionCounts = answerService.ReporteQuestionsByCount();
-            
-
-            return Ok(questionOptionCounts);
-        }
 
         [HttpGet("destinosByUserId/{userId}")]
         public async Task<IActionResult> GetCitiesByUserId(int userId)
@@ -85,6 +76,13 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(questionOptionCounts);
         }
 
+        [HttpGet("CountAnswersById/{questionId}")]
+        public async Task<IActionResult> GetQuestionOptionCountsById(int questionId)
+        {
+            var questionOptionCounts = await answerService.GetQuestionOptionCountsById(questionId);
+            return Ok(questionOptionCounts);
+        }
+        
         [HttpGet("AnswerTextByUser/{userId}")]
         public async Task<IActionResult> GetAnswerTextByUser(int userId)
         {

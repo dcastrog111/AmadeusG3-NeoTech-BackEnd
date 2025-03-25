@@ -17,9 +17,15 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             userRepository = new UserRepository(dbContext);
         }
 
-        public async Task<List<User>> GetAllUsers()
+        public async Task<List<UserResponse>> GetAllUsers()
         {
-            return await userRepository.GetAllUsers();
+            var users = await userRepository.GetAllUsers();
+            var userResponse = new List<UserResponse>();
+            foreach (var user in users)
+            {
+                userResponse.Add(UserToUserResponse.MapUserToUserResponse(user)) ;
+            }
+            return userResponse;
         }
 
         public async Task<User?> GetUserById(int id)
