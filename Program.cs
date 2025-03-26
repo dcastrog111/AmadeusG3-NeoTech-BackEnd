@@ -22,6 +22,7 @@ builder.Services.AddScoped<CityService>();
 builder.Services.AddScoped<CityRepository>();
 builder.Services.AddScoped<DestinationService>();
 builder.Services.AddScoped<DestinationRepository>();
+builder.Services.AddScoped<AuthServices>();
 
 
 builder.Services.AddCors(options =>
