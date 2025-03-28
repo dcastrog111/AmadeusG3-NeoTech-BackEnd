@@ -17,6 +17,8 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             userRepository = new UserRepository(dbContext);
         }
 
+        //Metodo para obtener todos los usuarios
+        //Se retorna el DTO UserResponse para no exponer la contraseña del usuario
         public async Task<List<UserResponse>> GetAllUsers()
         {
             var users = await userRepository.GetAllUsers();
@@ -28,11 +30,14 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return userResponse;
         }
 
+        //Metodo para obtener un usuario por id
         public async Task<User?> GetUserById(int id)
         {
             return await userRepository.GetUserById(id);
         }
 
+        //Metodo para obtener un usuario por Email
+        //Se retorna el DTO UserResponse para no exponer la contraseña del usuario
         public async Task<UserResponse?> GetUserByEmail(string email)
         {
             var user = await userRepository.GetUserByEmail(email);
@@ -41,6 +46,8 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return userResponse; 
         }
 
+        //Metodo para crear un usuario
+        //Se valida con el email usuario ya existe, si no existe se crea el usuario
         public async Task<User> CreateUser(User user)
         {
             var saveUser = await userRepository.GetUserByEmail(user.Email);
@@ -52,6 +59,8 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             }
         }
 
+        //Metodo para validar la contraseña del usuario administrador
+        //Se valida que el usuario exista y que sea administrador
         public async Task<string> ValidatePassword(int idUser, string password)
         {
             var user = await userRepository.GetUserById(idUser);
@@ -61,11 +70,13 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             else return "Contraseña incorrecta, intente de nuevo";
         }
 
+        //Metodo para validar eliminar un usuario
         public async Task<User?> DeleteUser(int id)
         {
             return await userRepository.DeleteUser(id);
         }
 
+        //Metodo para validar actualizar un usuario
         public async Task<User?> UpdateUser(int id, User user)
         {
             return await userRepository.UpdateUser(id, user);

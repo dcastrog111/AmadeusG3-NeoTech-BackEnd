@@ -17,12 +17,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             cityService = new CityService(dbContext);
         }
 
-        [HttpGet("all")]
-        public async Task<IActionResult> GetAllCities(){
-            var cities = await cityService.GetAllCities();
-            return Ok(cities);
-        }
-
+        //Endpoint para obtener una ciudad por nombre
         [HttpGet("byName/{City}")]
         public async Task<IActionResult> GetCityByName(string City)
         {
@@ -35,6 +30,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(city);
         }
 
+        //Endpoint para obtener dos ciudades por nombre
         [HttpGet("byNames/{Fist_City}/{Second_City}")]
 
         public async Task<IActionResult> GetCityByName(string Fist_City, string Second_City){
@@ -50,6 +46,12 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             }
 
             var cities = new List<City>{city1, city2};
+            return Ok(cities);
+        }
+
+        [HttpGet("all")]
+        public async Task<IActionResult> GetAllCities(){
+            var cities = await cityService.GetAllCities();
             return Ok(cities);
         }
 

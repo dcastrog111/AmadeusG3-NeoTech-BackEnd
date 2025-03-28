@@ -17,6 +17,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             questionService = new QuestionService(dbContext);
         }
 
+        //Endpoint para obtener todas las preguntas
         [HttpGet("all")]
         public async Task<IActionResult> GetAllQuestions()
         {
@@ -29,6 +30,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(questions);
         }
 
+        //Endpoint para obtener una pregunta por id de pregunta
         [HttpGet("byId/{id}")]
         public async Task<ActionResult<Question>> GetQuestionById(int id)
         {

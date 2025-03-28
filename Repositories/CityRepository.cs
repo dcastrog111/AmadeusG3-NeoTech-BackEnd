@@ -13,21 +13,25 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             this.dbContext = dbContext;
         }
 
+        //Método para obtener todas las ciudades
         public async Task<List<City>> GetAllCities()
         {
             return await dbContext.Cities.ToListAsync();
         }
 
+        //Método para obtener una ciudad por su nombre
         public async Task<City?> GetCityByName(string NombreDestino)
         {
             return await dbContext.Cities.FirstOrDefaultAsync(city => city.NombreDestino == NombreDestino);
         }
 
+        //Método para obtener una ciudad por su id
         public async Task<City?> GetCityById(int Id)
         {
             return await dbContext.Cities.FirstOrDefaultAsync(city => city.Id == Id);
         }
 
+        //Método para crear una ciudad
         public async Task<City> CreateCity(City city)
         {
             var newCity = dbContext.Cities.Add(city);
@@ -35,6 +39,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return newCity.Entity;
         }
 
+        //Método para actualizar una ciudad
         public async Task<City?> UpdateUser(int id, City city)
         {
             var cityToBeUpdate = await this.GetCityById(id);

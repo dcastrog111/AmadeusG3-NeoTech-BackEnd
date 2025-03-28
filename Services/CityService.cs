@@ -12,27 +12,32 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             
             cityRepository = new CityRepository(dbContext);
         }
-
+        
+        //Método para obtener todas las ciudades
         public async Task<List<City>> GetAllCities()
         {
             return await cityRepository.GetAllCities();
         }
 
+        //Método para obtener una ciudad por su nombre
         public async Task<City?> GetCityByName(string NombreDestino)
         {
             return await cityRepository.GetCityByName(NombreDestino);
         }
 
+        //Método para obtener una ciudad por su id
         public async Task<City?> GetCityById(int Id)
         {
             return await cityRepository.GetCityById(Id);
         }
 
+        //Método para crear una ciudad
         public async Task<City> CreateCity(City city)
         {
             return await cityRepository.CreateCity(city);
         }
 
+        //Método para actualizar una ciudad
         public async Task<City?> UpdateUser(int id, City city)
         {
             return await cityRepository.UpdateUser(id, city);

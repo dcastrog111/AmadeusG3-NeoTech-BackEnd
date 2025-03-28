@@ -16,31 +16,36 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             destinationRepository = new DestinationRepository(dbContext);
         }
 
+        // Método para obtener todos los destinos
         public async Task<List<Destination>> GetAllDestinations()
         {
             return await destinationRepository.GetAllDestinations();
         }
 
+        // Método para obtener un destino por combinación(hash)
         public async Task<Destination?> GetDestinationByCombination(string combination)
         {
             return await destinationRepository.GetDestinationByCombination(combination);
         }
-
+        // Método para obtener un destino por id
         public async Task<Destination?> GetDestinationById(int id)
         {
             return await destinationRepository.GetDestinationById(id);
         }
 
+        // Método para crear un destino
         public async Task<Destination?> CreateDestination(Destination destination)
         {
             return await destinationRepository.CreateDestination(destination);
         }
 
+        // Método para obtener el hash de un destino(combinación opciones)
         public string GetDestinationHash(string id)
         {
             return ComputeSha256Hash(id);
         }
 
+        // Método para obtener el hash de un string
         private static string ComputeSha256Hash(string rawData)
         {
             using (SHA256 sha256Hash = SHA256.Create())

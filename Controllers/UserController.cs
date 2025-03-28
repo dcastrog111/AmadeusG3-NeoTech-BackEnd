@@ -19,6 +19,52 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             userService = new UserService(dbContext);
         }
 
+        //Endpoint para obetener usuario por correo email
+        [HttpGet("byEmail/{email}")]
+        public async Task<ActionResult<UserResponse>> GetUserByEmail(string email)
+        {
+            var userResponse = await userService.GetUserByEmail(email);
+            
+            if (userResponse == null)
+            {
+                return NotFound( new Response {Message = "Usuario no se encuentra registrado", StatusCode = 404});
+            }
+            return userResponse;
+        }
+
+        //Endpoint para crear un nuevo usuario
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateUser(User user)
+        {
+            var newUser = await userService.CreateUser(user);
+            return Created(nameof(GetUserById), newUser);
+        }
+
+        //Endpoint para validar contraseña de un usuario administrador
+        [HttpGet("validatePassword/{idUser}/{password}")]
+        public async Task<IActionResult> ValidatePassword(int idUser, string password)
+        {
+            var response = await userService.ValidatePassword(idUser, password);
+            if (response == "Usuario no encontrado")
+            {
+                return NotFound(new Response { Message = "Usuario no se encuentra registrado", StatusCode = 404 });
+            }
+            else if(response == "Usuario no es administrador")
+            {
+                return BadRequest(new Response { Message = "Usuario no es administrador", StatusCode = 400 });
+            }
+            else if(response == "Contraseña incorrecta, intente de nuevo")
+            {
+                return BadRequest(new Response { Message = "Contraseña incorrecta, intente de nuevo", StatusCode = 400 });
+            }
+            else if(response == "Contraseña correcta, puede continuar")
+            {
+                return Ok(new { Message = response, StatusCode = 200 });
+            }
+            return StatusCode(500, new Response { Message = "Error desconocido", StatusCode = 500 });
+        }
+
+        //Endpoint para obtener todos los usuarios
         [HttpGet("all")]
         public async Task<IActionResult> GetAllUsers()
         {
@@ -41,48 +87,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
                 return NotFound(new Response {Message = "Usuario no se encuentra registrado", StatusCode = 404});
             }
             return user;
-        }
-
-        [HttpGet("byEmail/{email}")]
-        public async Task<ActionResult<UserResponse>> GetUserByEmail(string email)
-        {
-            var userResponse = await userService.GetUserByEmail(email);
-            
-            if (userResponse == null)
-            {
-                return NotFound( new Response {Message = "Usuario no se encuentra registrado", StatusCode = 404});
-            }
-            return userResponse;
-        }
-
-        [HttpPost("create")]
-        public async Task<IActionResult> CreateUser(User user)
-        {
-            var newUser = await userService.CreateUser(user);
-            return Created(nameof(GetUserById), newUser);
-        }
-
-        [HttpGet("validatePassword/{idUser}/{password}")]
-        public async Task<IActionResult> ValidatePassword(int idUser, string password)
-        {
-            var response = await userService.ValidatePassword(idUser, password);
-            if (response == "Usuario no encontrado")
-            {
-                return NotFound(new Response { Message = "Usuario no se encuentra registrado", StatusCode = 404 });
-            }
-            else if(response == "Usuario no es administrador")
-            {
-                return BadRequest(new Response { Message = "Usuario no es administrador", StatusCode = 400 });
-            }
-            else if(response == "Contraseña incorrecta, intente de nuevo")
-            {
-                return BadRequest(new Response { Message = "Contraseña incorrecta, intente de nuevo", StatusCode = 400 });
-            }
-            else if(response == "Contraseña correcta, puede continuar")
-            {
-                return Ok(new { Message = response, StatusCode = 200 });
-            }
-            return StatusCode(500, new Response { Message = "Error desconocido", StatusCode = 500 });
         }
 
         [HttpDelete("delete/{id}")]

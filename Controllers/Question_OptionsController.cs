@@ -18,6 +18,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             question_OptionsService = new Question_OptionsService(dbContext);
         }
 
+        //Endpoint para obtener todas las opciones de las preguntas
         [HttpGet("all")]
         public async Task<IActionResult> GetAllQuestion_Options()
         {

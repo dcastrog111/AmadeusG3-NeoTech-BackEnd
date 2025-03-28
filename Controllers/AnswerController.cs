@@ -19,6 +19,30 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             answerService = new AnswerService(dbContext);
         }
 
+        //Endpoint para guardar las respuestas y calcular el destino
+        [HttpGet("get/{userId}/{respuestas}")]
+        public async Task<IActionResult> SaveAndCalculate(int userId, string respuestas)
+        {
+            var answerResponse = await answerService.SaveAndCalculate(userId, respuestas);
+            return Ok(answerResponse);
+        }
+
+        //Endpoint para obtener todas las respuestas de un usuario - para reportes
+        [HttpGet("CountAnswers")]
+        public async Task<IActionResult> GetQuestionOptionCounts()
+        {
+            var questionOptionCounts = await answerService.GetQuestionOptionCounts();
+            return Ok(questionOptionCounts);
+        }
+
+        //Endpoint para obtener todas respuestas por id de pregunta - para reportes
+        [HttpGet("CountAnswersById/{questionId}")]
+        public async Task<IActionResult> GetQuestionOptionCountsById(int questionId)
+        {
+            var questionOptionCounts = await answerService.GetQuestionOptionCountsById(questionId);
+            return Ok(questionOptionCounts);
+        }
+
         [HttpPost("create")]
         public async Task<IActionResult> CreateAnswer(AnswerRequest answerRequest){
             
@@ -29,13 +53,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
                 return BadRequest(new Response {Message = "Usuario ya ha registrado esta opción", StatusCode = 400});
             }
             return Ok(answer);
-        }
-
-        [HttpGet("get/{userId}/{respuestas}")]
-        public async Task<IActionResult> SaveAndCalculate(int userId, string respuestas)
-        {
-            var answerResponse = await answerService.SaveAndCalculate(userId, respuestas);
-            return Ok(answerResponse);
         }
 
         [HttpGet("{userId}/{questionId}")]
@@ -50,13 +67,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             return Ok(answers);
         }
 
-        [HttpGet("destinosByUserId/{userId}")]
-        public async Task<IActionResult> GetCitiesByUserId(int userId)
-        {
-            var answerResponse = await answerService.GetCitiesByUserId(userId);
-            return Ok(answerResponse);
-        }
-
         [HttpGet("byUserId/{userId}")]
         public async Task<IActionResult> GetAnswersByUserId(int userId)
         {
@@ -67,27 +77,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Controllers{
             }
 
             return Ok(answers);
-        }
-
-        [HttpGet("CountAnswers")]
-        public async Task<IActionResult> GetQuestionOptionCounts()
-        {
-            var questionOptionCounts = await answerService.GetQuestionOptionCounts();
-            return Ok(questionOptionCounts);
-        }
-
-        [HttpGet("CountAnswersById/{questionId}")]
-        public async Task<IActionResult> GetQuestionOptionCountsById(int questionId)
-        {
-            var questionOptionCounts = await answerService.GetQuestionOptionCountsById(questionId);
-            return Ok(questionOptionCounts);
-        }
-        
-        [HttpGet("AnswerTextByUser/{userId}")]
-        public async Task<IActionResult> GetAnswerTextByUser(int userId)
-        {
-            var answerText = await answerService.GetAnswerTextByUser(userId);
-            return Ok(answerText);
         }
 
     }

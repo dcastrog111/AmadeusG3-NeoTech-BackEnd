@@ -2,11 +2,6 @@ using AmadeusG3_Neo_Tech_BackEnd.Models;
 using AmadeusG3_Neo_Tech_BackEnd.Data;
 using Microsoft.EntityFrameworkCore;
 using AmadeusG3_Neo_Tech_BackEnd.Dtos;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
-using System.IO.Compression;
 
 // using System.Reflection;
 
@@ -20,43 +15,39 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             this.dbContext = dbContext;
         }
 
-        public IQueryable<Answer> GetAllAnswersQuery()
-        {
-            return dbContext.Answers;
-        }
-
-        public Answer GetByIdQuery(int Id)
-        {
-            return dbContext.Answers.FirstOrDefault(answer => answer.Id == Id);
-        }
-
+        //Método para obtener todas las respuestas
         public async Task<List<Answer>> GetAllAnswers()
         {
             return await dbContext.Answers.ToListAsync();
         }
 
+        //Método para obtener una respuesta por id
         public async Task<Answer?> GetAnswerById(int Id)
         {
             return await dbContext.Answers.FirstOrDefaultAsync(answer => answer.Id == Id);
         }
 
+        //Método para obtener una respuesta por el id del usuario, incluyendo la pregunta y la opción de respuesta
         public async Task<List<Answer>> GetAnswersByUserId(int userId)
         {
             return await dbContext.Answers.Include(u => u.User).Include(o => o.Question_Option).Include(q => q.Question)
                 .Where(answer => answer.User.Id == userId).ToListAsync();
         }
 
+        //Método para obtener una respuesta por el id de la pregunta, incluyendo la pregunta
         public async Task<List<Answer>> GetAnswersByQuestionId(int questionId)
         {
             return await dbContext.Answers.Include(q => q.Question).Where(answer => answer.Question.Id == questionId).ToListAsync();
         }
 
+        //Método para obtener una respuesta por el id del usuario y el id de la pregunta, incluyendo la pregunta y la opción de respuesta
         public async Task<List<Answer>> GetAnswersByUserIdQuestionId(int userId, int questionId) 
         {
             return await dbContext.Answers.Include(q => q.Question).Include(u => u.User).Include(o => o.Question_Option)
                 .Where(answer => answer.Question.Id == questionId).Where(answer => answer.User.Id == userId).ToListAsync();
         }
 
+        //Método para crear una respuesta
         public async Task<Answer> CreateAnswer(Answer answer)
         {
             var newAnswer = dbContext.Answers.Add(answer);
@@ -64,6 +55,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return newAnswer.Entity;
         }
 
+        //Método para actualiza una respuesta
         public async Task<Answer> UpdateAnswer(Answer answer)
         {
             dbContext.Answers.Update(answer);
@@ -71,6 +63,8 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return answer;
         }
 
+        //Método para contar las opciones seleccionadas por los usuarios y guardas en la tabla answers
+        //Retorna una lista de objetos QuestionOptionCount que contiene el texto de la opción de respuesta, el conteo, el id y el texto de la pregunta
         public async Task<List<QuestionOptionCount>> GetQuestionOptionCounts()
         {
             var query = from a in dbContext.Answers
@@ -101,7 +95,9 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
 
         }
 
-public async Task<List<QuestionOptionCount>> GetQuestionOptionCountsById(int QuestionId)
+        //Método para contar las opciones seleccionadas por los usuarios para cada pregunta y guardas en la tabla answers
+        //Retorna una lista de objetos QuestionOptionCount que contiene el texto de la opción de respuesta, el conteo, el id y el texto de la pregunta
+        public async Task<List<QuestionOptionCount>> GetQuestionOptionCountsById(int QuestionId)
         {
             var query = from a in dbContext.Answers
                         join qo in dbContext.Questions_Options
@@ -132,6 +128,7 @@ public async Task<List<QuestionOptionCount>> GetQuestionOptionCountsById(int Que
 
         }
 
+        //Método para obtener las opciones seleccionadas por un usuario y guardas en la tabla answers
         public async Task<List<AnswerDescriptionUser>> GetAnswerTextByUser(int userId)
         {
             var query = from a in dbContext.Answers

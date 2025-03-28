@@ -14,6 +14,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             questionRepository = new QuestionRepository(dbContext);
         }
 
+        // Método para obtener todas las preguntas
         public async Task<List<Question>> GetAllQuestion()
         {
             var questions = questionRepository.GetAllQuestion();
@@ -21,11 +22,13 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Services{
             return await questions;
         }
 
+        // Método para obtener una pregunta por id
         public async Task<Question?> GetQuestionById(int id)
         {
             return await questionRepository.GetQuestionById(id);
         }
 
+        // Método para crear una pregunta
         public async Task<Question> CreateQuestion(Question question)
         {
             var saveQuestion = await questionRepository.CreateQuestion(question);

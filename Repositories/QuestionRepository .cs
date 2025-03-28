@@ -13,21 +13,19 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             this.dbContext = dbContext;
         }
 
-        public IQueryable<Question> GetAllQuestionQuery()
-        {
-            return dbContext.Questions;
-        }
-
+        //Método para obtener todas las preguntas
         public async Task<List<Question>> GetAllQuestion()
         {
             return await dbContext.Questions.ToListAsync();
         }
 
+        //Método para obtener una pregunta por id
         public async Task<Question?> GetQuestionById(int id)
         {
             return await dbContext.Questions.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        //Método para crear una pregunta
         public async Task<Question> CreateQuestion(Question question)
         {
             var newQuestion = dbContext.Questions.Add(question);
@@ -35,6 +33,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Repositories{
             return newQuestion.Entity;
         }
 
+        //Método para eliminar una pregunda por id
         public async Task<Question?> DeleteQuestion(int id)
         {
             var question = await GetQuestionById(id);
