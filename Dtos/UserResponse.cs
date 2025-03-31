@@ -6,5 +6,6 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Dtos{
         public string Full_Name { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public int Tipo_Usuario { get; set; }
+        public string Avatar { get; set; } = string.Empty;
     }
 }

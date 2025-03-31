@@ -9,6 +9,7 @@ namespace AmadeusG3_Neo_Tech_BackEnd.Models
         public string Email { get; set; } = string.Empty;
         public string Password { get; set; } = string.Empty;
         public Tipo_Usuario Tipo_Usuario { get; set; }
+        public string Avatar { get; set; } = string.Empty;
 
         [NotMapped]
         public ICollection<Answer> Answers { get; set; } = [];
